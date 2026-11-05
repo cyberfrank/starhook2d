@@ -1,0 +1,4 @@
+; Default font
+sprite_width: 6
+sprite_height: 12
+path: "data/font.png"

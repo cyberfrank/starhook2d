@@ -1,0 +1,3 @@
+bin/*
+!bin/data
+bin/data/log.txt

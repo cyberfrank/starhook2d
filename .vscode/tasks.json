@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "options": {
+        "shell": {
+            "executable": "cmd.exe",
+            "args": [
+                "/d", "/c"
+            ]
+        }
+    },
+    "tasks": [
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "build debug",
+            "group": "build",
+            "problemMatcher": "$msCompile",
+            "dependsOn": [ "Hash"]
+        },
+        {
+            "label": "Build Release",
+            "type": "shell",
+            "command": "build",
+            "group": "build",
+            "problemMatcher": "$msCompile",
+            "dependsOn": [ "Hash"]
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "build clean",
+            "group": "build"
+        },
+        {
+            "label": "Copy Foundation Lib",
+            "type": "shell",
+            "command": "copy_foundation",
+            "group": "build"
+        },
+        {
+            "label": "Hash",
+            "type": "shell",
+            "command": "${workspaceFolder}\\bin\\hash.exe ${workspaceFolder}\\code\\lua_bindings.c",
+            "group": "none"
+        }
+    ],
+}

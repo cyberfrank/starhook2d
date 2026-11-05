@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "Win64",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_CRT_SECURE_NO_WARNINGS",
+                "OS_WINDOWS"
+            ]
+        }
+    ],
+    "version": 4
+}
