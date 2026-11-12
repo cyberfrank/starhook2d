@@ -41,9 +41,9 @@ function init()
     input.add_button_input_mapping(fire_button, 'space')
     input.add_button_input_mapping(fire_button, 'f')
 
-    input.add_axis_input_mapping(thrust_axis, 1, -1.0, 0.0) -- GAMEPAD_LEFT_STICK_Y
-    input.add_axis_input_mapping(rotate_axis, 2, 1.0, 0.0)  -- GAMEPAD_RIGHT_STICK_X
-    input.add_axis_input_mapping(fire_trigger, 5, 1.0, 0.0) -- GAMEPAD_RIGHT_TRIGGER
+    input.add_axis_input_mapping(thrust_axis, 'gamepad_lstick_y', -1.0, 0.0)
+    input.add_axis_input_mapping(rotate_axis, 'gamepad_rstick_x', 1.0, 0.0)
+    input.add_axis_input_mapping(fire_trigger, 'gamepad_rtrigger', 1.0, 0.0)
 end
 
 function apply_deadzone(value)

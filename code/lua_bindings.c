@@ -15,6 +15,7 @@
 #include <math.h>
 
 static int convert_string_to_button(const char *str);
+static int convert_string_to_axis(const char *str);
 
 void lua_get_int(lua_State *L, const char *name, int *result) 
 {
@@ -498,11 +499,16 @@ int l_AddInputBinding(lua_State *L)
 int l_AddAxisInputMapping(lua_State *L) 
 {
     int id = (int)luaL_checkinteger(L, 1);
-    int axis = (int)luaL_checkinteger(L, 2);
+    const char *str = luaL_checkstring(L, 2);
     float scale = (float)luaL_checknumber(L, 3);
     float bias = (float)luaL_checknumber(L, 4);
-    lua_pushboolean(L, input_add_axis_mapping(id, axis, scale, bias));
-    return 1;
+    int axis = convert_string_to_axis(str);
+    if (axis != -1)
+    {
+        lua_pushboolean(L, input_add_axis_mapping(id, axis, scale, bias));
+        return 1;
+    }
+    return 0;
 }
 
 int l_AddActionInputMapping(lua_State *L) 
@@ -728,6 +734,39 @@ static int convert_string_to_button(const char *str)
         case STATIC_HASH("ralt", 0xdbe5debd3c69c14ULL): return KEY_RIGHT_ALT;
         case STATIC_HASH("rsuper", 0xf9391f180ba38569ULL): return KEY_RIGHT_SUPER;
         case STATIC_HASH("menu", 0x45cb22eff56352deULL): return KEY_MENU;
+        // Gamepad
+        case STATIC_HASH("gamepad_face_down", 0xf58ab489bf4c94daULL): return GAMEPAD_FACE_BTN_DOWN;
+        case STATIC_HASH("gamepad_face_right", 0xaf045a359991509fULL): return GAMEPAD_FACE_BTN_RIGHT;
+        case STATIC_HASH("gamepad_face_left", 0x663939628064357aULL): return GAMEPAD_FACE_BTN_LEFT;
+        case STATIC_HASH("gamepad_face_up", 0x8f6b517e2a3c5bc4ULL): return GAMEPAD_FACE_BTN_UP;
+        case STATIC_HASH("gamepad_lbumper", 0x40db30dae0c4e8eULL): return GAMEPAD_LEFT_BUMPER;
+        case STATIC_HASH("gamepad_rbumper", 0xae060b875f2a890eULL): return GAMEPAD_RIGHT_BUMPER;
+        case STATIC_HASH("gamepad_special1", 0xa3cee8dfad8f856dULL): return GAMEPAD_SPECIAL_1;
+        case STATIC_HASH("gamepad_special2", 0xf3f87a061421ba2fULL): return GAMEPAD_SPECIAL_2;
+        case STATIC_HASH("gamepad_special3", 0xc46e964b35c1613cULL): return GAMEPAD_SPECIAL_3;
+        case STATIC_HASH("gamepad_lstick", 0xe868b0d6dc52dfc5ULL): return GAMEPAD_LEFT_STICK;
+        case STATIC_HASH("gamepad_rstick", 0x220942145dc8caceULL): return GAMEPAD_RIGHT_STICK;
+        case STATIC_HASH("gamepad_dpad_up", 0x13cd5a3fe4d8fcc8ULL): return GAMEPAD_DPAD_UP;
+        case STATIC_HASH("gamepad_dpad_right", 0x7ba8cc0c9c2d0b8ULL): return GAMEPAD_DPAD_RIGHT;
+        case STATIC_HASH("gamepad_dpad_down", 0x7c15a89b5fbe0b24ULL): return GAMEPAD_DPAD_DOWN;
+        case STATIC_HASH("gamepad_dpad_left", 0xa1b91964a51274e2ULL): return GAMEPAD_DPAD_LEFT;
     }
+    log_error("Invalid button name '%s'", str);
+    return -1;
+}
+
+static int convert_string_to_axis(const char *str)
+{
+    uint64_t hash = murmur_hash64a_string(str);
+    switch (hash)
+    {
+        case STATIC_HASH("gamepad_lstick_x", 0x16c2b8893be361f0ULL): return GAMEPAD_LEFT_STICK_X;
+        case STATIC_HASH("gamepad_lstick_y", 0x2e6a5178d34805ULL): return GAMEPAD_LEFT_STICK_Y;
+        case STATIC_HASH("gamepad_rstick_x", 0xf466500d18f73fbaULL): return GAMEPAD_RIGHT_STICK_X;
+        case STATIC_HASH("gamepad_rstick_y", 0x41bcfc7d5ed2acb1ULL): return GAMEPAD_RIGHT_STICK_Y;
+        case STATIC_HASH("gamepad_ltrigger", 0x23d5b5838ab0ab73ULL): return GAMEPAD_LEFT_TRIGGER;
+        case STATIC_HASH("gamepad_rtrigger", 0xc04baa0a1ef4dbc4ULL): return GAMEPAD_RIGHT_TRIGGER;
+    }
+    log_error("Invalid axis name '%s'", str);
     return -1;
 }
