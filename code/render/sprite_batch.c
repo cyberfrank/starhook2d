@@ -483,7 +483,7 @@ static void render_chunk(const Sprite_Info *sprites, uint32_t count, gfx_id *bou
             vertices[v_idx].color = sprite->color;
             vertices[v_idx].clip = clip_rect;
             vertices[v_idx].uv = vec2_add(vec2_element_mul(corner_offsets[v_idx ^ sprite->flip_flag], sprite->source_size), sprite->source_position);
-            vertices[v_idx].texture_slot = slots[v_idx];
+            vertices[v_idx].texture_slot = slots[i];
         }
 
         vertices += NUM_VERTICES_PER_SPRITE;
